@@ -14,6 +14,8 @@ export default function (raw: any): User | null {
     }
   }
 
-  console.error(error)
+  if (__DEBUG__) {
+    console.error(error)
+  }
   return null
 }

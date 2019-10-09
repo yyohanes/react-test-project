@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AutocompleteSearchBox Should render suggestions if options > 0 & input is focused 1`] = `
+<div>
+  <div
+    class="autocompleteSearchBox"
+  >
+    <input
+      class=""
+      placeholder="Search"
+      type="text"
+      value=""
+    />
+    <div
+      class="autocompleteSuggestions"
+    >
+      <div>
+        <div
+          class=""
+        >
+          <p
+            class="option-item"
+          >
+            Test 1
+          </p>
+        </div>
+        <div
+          class=""
+        >
+          <p
+            class="option-item"
+          >
+            Test 2
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

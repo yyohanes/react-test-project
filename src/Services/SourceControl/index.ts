@@ -3,17 +3,23 @@ import GitHub from './GitHub'
 
 export * from './Models'
 
-export function makeSourceControlService(
+const serviceInstancesMap: { [key: string]: IService } = {}
+
+export function getSourceControlService(
   provider: string,
   account: string,
   repository: string,
 ): IService {
-  switch (provider) {
-    case 'github':
-      return new GitHub(account, repository)
-    default:
-      console.error(`Source Control ${provider} not found`)
-      // Since we only have one provider, always return GitHub
-      return new GitHub(account, repository)
+  const serviceKey = `${provider}_${account}_${repository}`
+  if (!serviceInstancesMap[serviceKey]) {
+    switch (provider) {
+      case 'github':
+        serviceInstancesMap[serviceKey] = new GitHub(account, repository)
+        break
+      default:
+        throw new Error(`Source Control ${provider} not found`)
+    }
   }
+
+  return serviceInstancesMap[serviceKey]
 }

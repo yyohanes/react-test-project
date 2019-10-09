@@ -1,16 +1,16 @@
 import {
   all,
-  takeEvery,
+  takeLatest,
   call,
   put,
 } from 'redux-saga/effects'
 
-import { makeSourceControlService } from 'app/Services/SourceControl'
+import { getSourceControlService } from 'app/Services/SourceControl'
 import * as SearchActions from './Actions'
 
-const sourceControlService = makeSourceControlService('github', 'facebook', 'react')
+const sourceControlService = getSourceControlService('github', 'facebook', 'react')
 
-function* handleRequestSearch({ payload }: ReturnType<typeof SearchActions.requestSearch>) {
+export function* handleRequestSearch({ payload }: ReturnType<typeof SearchActions.requestSearch>) {
   const { keyword, page, limit } = payload
 
   yield put(SearchActions.setIsRequesting(true))
@@ -39,6 +39,6 @@ function* handleRequestSearch({ payload }: ReturnType<typeof SearchActions.reque
 
 export default function* () {
   yield all([
-    takeEvery(SearchActions.requestSearch.TYPE, handleRequestSearch),
+    takeLatest(SearchActions.requestSearch.TYPE, handleRequestSearch),
   ])
 }

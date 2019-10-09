@@ -16,7 +16,7 @@ const shortcutWhitelistedKeys = ['control', 'f']
 type Props<OT, O = OT[]> = {
   defaultValue?: string | number
   options: O
-  renderOption: (option: OT, index: number) => React.ReactNode
+  renderOption: (option: OT, index: number, focusIndex: number) => React.ReactNode
   renderFooter?: (options: O) => React.ReactNode
   focusStyle?: AvailableStyle
   placeholder?: string
@@ -147,7 +147,7 @@ export default <OT extends unknown>(props: Props<OT>) => {
           <ListGroup>
             {options.map((option, idx) => (
               <ListGroupItem key={idx} colorStyle={focusIndex === idx ? focusStyle : undefined}>
-                {renderOption(option, idx)}
+                {renderOption(option, idx, focusIndex)}
               </ListGroupItem>
             ))}
             {renderFooter && (

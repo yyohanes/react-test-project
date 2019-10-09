@@ -16,6 +16,8 @@ export default function (raw: any): Label | null {
     }
   }
 
-  console.error(error)
+  if (__DEBUG__) {
+    console.error(error)
+  }
   return null
 }

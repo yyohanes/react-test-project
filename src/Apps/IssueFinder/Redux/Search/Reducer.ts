@@ -1,10 +1,11 @@
 import Immutable, { ImmutableArray, ImmutableObject } from 'seamless-immutable'
 
+import { Issue } from 'app/Services/SourceControl'
 import { AnyAction } from 'app/Utils/Redux'
 import * as SearchActions from './Actions'
 
 export type SearchState = ImmutableObject<{
-  issues: ImmutableArray<any>
+  issues: ImmutableArray<Issue>
   totalIssues: number
   currentPage: number
   limit: number

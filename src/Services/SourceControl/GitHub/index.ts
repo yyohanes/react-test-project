@@ -39,6 +39,8 @@ class GitHubService implements IService {
     return this._repository
   }
 
+  findIssuesRequest = query => api.get<{ total_count: number, items: any[] }>('/search/issues', query)
+
   findIssues = (options?: FindIssuesOptions): Promise<FindIssuesResults> => {
     const queryFilters = [
       `org:${this.account}`,
@@ -59,7 +61,7 @@ class GitHubService implements IService {
     query.q = queryFilters.join(' ')
 
     return new Promise(async (resolve, reject) => {
-      const response = await api.get<{ total_count: number, items: any[] }>('/search/issues', query)
+      const response = await this.findIssuesRequest(query)
 
       if (response.ok && response.data) {
         const issueRecords = response.data.items
