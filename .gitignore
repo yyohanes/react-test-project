@@ -1,0 +1,13 @@
+# Generated
+/public
+
+# package directories
+node_modules
+
+# Secrets
+.env
+
+# Misc
+yarn-error.log
+.idea/
+.DS_Store
