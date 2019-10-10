@@ -89,6 +89,7 @@ const Header = (props: Props) => {
               <small>{isRequesting ? 'Searching...' : `Showing ${options.length} of ${totalIssues} results`}</small>
             )}
             onNearBottom={debounce(handleOnSearchNearBottom, 250)}
+            nearBottomThreshold={200}
             onSelect={handleOnSelect}
           />
         </Column>

@@ -11,8 +11,9 @@ type Props<OT, O = OT[]> = {
   renderOption: (option: OT, index: number, focusIndex: number) => React.ReactNode
   renderFooter?: (options: O) => React.ReactNode
   focusStyle?: AvailableStyle
-  onNearBottom?: () => void,
-  onSelect?: (option: OT) => void,
+  onNearBottom?: () => void
+  nearBottomThreshold?: number
+  onSelect?: (option: OT) => void
 }
 
 export default <OT extends unknown>(props: Props<OT>) => {
@@ -24,6 +25,7 @@ export default <OT extends unknown>(props: Props<OT>) => {
     focusIndex,
     onNearBottom,
     onSelect,
+    nearBottomThreshold = 150,
   } = props
   const resultsWrapper = useRef<HTMLDivElement>(null)
   const activeItem = useRef<HTMLDivElement>(null)
@@ -37,7 +39,7 @@ export default <OT extends unknown>(props: Props<OT>) => {
   const handleOnResultsScroll = () => {
     if (resultsWrapper.current && onNearBottom) {
       const distanceToBottom = resultsWrapper.current.scrollHeight - (resultsWrapper.current.scrollTop + resultsWrapper.current.offsetHeight)
-      if (distanceToBottom <= 120) {
+      if (distanceToBottom <= nearBottomThreshold) {
         onNearBottom()
       }
     }

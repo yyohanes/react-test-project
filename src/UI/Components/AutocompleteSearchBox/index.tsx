@@ -21,6 +21,7 @@ type Props<OT, O = OT[]> = {
   isLoading?: boolean
   onInputChange?: (changedValue: string) => void
   onNearBottom?: () => void
+  nearBottomThreshold?: number
   onSelect?: (option: OT) => void
 }
 
@@ -36,6 +37,7 @@ export default <OT extends unknown>(props: Props<OT>) => {
     isLoading,
     onNearBottom,
     onSelect,
+    nearBottomThreshold,
   } = props
   const [pressedKeys, setPressedKeys] = useState<string[]>([])
   const [focusIndex, setFocusIndex] = useState<number>(-1)
@@ -134,6 +136,7 @@ export default <OT extends unknown>(props: Props<OT>) => {
           focusStyle={focusStyle}
           renderFooter={renderFooter}
           onNearBottom={onNearBottom}
+          nearBottomThreshold={nearBottomThreshold}
           onSelect={onSelect}
         />
       )}
