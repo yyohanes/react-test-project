@@ -124,7 +124,10 @@ const config = (env, argv = {}) => {
       new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, 'src', 'index.html'),
-        filename: path.resolve(__dirname, BUILD_FOLDER, 'index.html')
+        filename: path.resolve(__dirname, BUILD_FOLDER, 'index.html'),
+        vars: {
+          pageTitle: `${envKeys['process.env.ISSUE_FINDER_SOURCE_CONTROL_REPO_NAME']} Issue Finder`,
+        },
       }),
       new webpack.DefinePlugin({
         __DEBUG__: isDev,
