@@ -26,3 +26,9 @@ All presentational components live here.
 /Utils
 All other utilities for usage across all domains that don't belong in Services and UI.
 ```
+
+### Running this locally
+1. Copy `.env.tpl` to `.env` to get started
+2. Usual drill, `yarn install` or `npm install`
+3. `yarn dev` or `npm run dev`
+4. If no browser window opens, visit `http://localhost:3000`
