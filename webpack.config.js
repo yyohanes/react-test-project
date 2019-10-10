@@ -67,9 +67,8 @@ const config = (env, argv = {}) => {
             {
               loader: 'css-loader',
               options: {
-                modules: true,
+                modules: false,
                 importLoaders: 2,
-                localsConvention: 'dashes',
               },
             },
             {
@@ -101,7 +100,7 @@ const config = (env, argv = {}) => {
               options: {
                 name: !isDev ? '[hash].[ext]' : '[name].[ext]',
                 outputPath: ASSETS_FOLDER,
-                publicPath: `/${BUILD_FOLDER}/${ASSETS_FOLDER}/`,
+                publicPath: `/${ASSETS_FOLDER}/`,
               },
             },
           ],
@@ -136,7 +135,6 @@ const config = (env, argv = {}) => {
           default: false,
           commons: {
             test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
             chunks: 'all',
             name(module) {
               // get the name. E.g. node_modules/packageName/not/this/part.js
@@ -147,14 +145,10 @@ const config = (env, argv = {}) => {
               return `npm.${packageName.replace('@', '')}`;
             },
           },
-          default: {
-            minChunks: 2,
-            reuseExistingChunk: true,
-          },
         },
       },
       runtimeChunk: {
-        name: entrypoint => `runtime.${entrypoint.name}`
+        name: entrypoint => `runtime.${entrypoint.name}`,
       },
     },
   }

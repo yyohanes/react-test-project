@@ -4,52 +4,60 @@ import React, {
   useRef,
   useCallback,
 } from 'react'
-import classNames from 'classnames'
 
-import { useStyles, AvailableStyle } from 'app/UI/ThemeProvider'
-import ListGroup, { ListGroupItem } from '../ListGroup'
+import { AvailableStyle } from 'app/UI/Theme'
 import SearchBox from '../SearchBox'
-import moduleStyles from './styles.module.scss'
+import Suggestions from './Suggestions'
 
 const shortcutWhitelistedKeys = ['control', 'f']
 
 type Props<OT, O = OT[]> = {
   defaultValue?: string | number
-  options: O
+  options: OT[]
   renderOption: (option: OT, index: number, focusIndex: number) => React.ReactNode
   renderFooter?: (options: O) => React.ReactNode
   focusStyle?: AvailableStyle
   placeholder?: string
-  onChange?: (changedValue: string) => void
+  isLoading?: boolean
+  onInputChange?: (changedValue: string) => void
+  onNearBottom?: () => void
+  onSelect?: (option: OT) => void
 }
 
 export default <OT extends unknown>(props: Props<OT>) => {
   const {
-    renderOption,
     defaultValue,
     placeholder,
     options,
+    onInputChange,
     focusStyle,
-    onChange,
     renderFooter,
+    renderOption,
+    isLoading,
+    onNearBottom,
+    onSelect,
   } = props
   const [isInputFocused, setIsInputFocused] = useState<boolean>(false)
   const [pressedKeys, setPressedKeys] = useState<string[]>([])
   const [focusIndex, setFocusIndex] = useState<number>(-1)
   const searchBoxRef = useRef<HTMLInputElement>(null)
-  const { styles } = useStyles()
 
   const isSearchShortcutPressed = shortcutWhitelistedKeys
     .filter(shortcut => pressedKeys.includes(shortcut)).length === 2
+  const shouldShowSuggestion = (isInputFocused && options.length > 0) || isLoading
 
   // Keyboard event listeners
   const handleOnInputKeyDown = useCallback(e => {
+    if (e.key.toLowerCase() === 'enter' && onSelect) {
+      onSelect(options[focusIndex])
+    }
+
     if (['arrowup', 'up'].includes(e.key.toLowerCase())) {
       e.preventDefault()
 
       setFocusIndex(_focusIndex => {
         if (_focusIndex <= 0) {
-          return options.length - 1
+          return 0
         }
         return _focusIndex - 1
       })
@@ -58,12 +66,12 @@ export default <OT extends unknown>(props: Props<OT>) => {
 
       setFocusIndex(_focusIndex => {
         if (_focusIndex >= options.length - 1) {
-          return 0
+          return _focusIndex
         }
         return _focusIndex + 1
       })
     }
-  }, [options])
+  }, [options, onSelect, focusIndex])
 
   const handleOnSearchShortcut = e => {
     if (!shortcutWhitelistedKeys.includes(e.key.toLowerCase())) {
@@ -85,13 +93,11 @@ export default <OT extends unknown>(props: Props<OT>) => {
   }
 
   const handleOnInputBlur = () => {
-    setIsInputFocused(false)
+    // Give it short window before closing the suggestions. This is to allow other events to run (eg: click)
+    setTimeout(() => {
+      setIsInputFocused(false)
+    }, 100)
   }
-
-  // Reset focus index on options change
-  useEffect(() => {
-    setFocusIndex(-1)
-  }, [options])
 
   // Attach Up/Down keyboard listener
   useEffect(() => {
@@ -109,6 +115,7 @@ export default <OT extends unknown>(props: Props<OT>) => {
   // Check if pressed keys contain ctrl + f
   useEffect(() => {
     if (searchBoxRef.current && isSearchShortcutPressed) {
+      setIsInputFocused(true)
       searchBoxRef.current.focus()
     }
   }, [pressedKeys])
@@ -135,29 +142,24 @@ export default <OT extends unknown>(props: Props<OT>) => {
   }, [handleOnSearchShortcut])
 
   return (
-    <div className={moduleStyles.autocompleteSearchBox}>
+    <div className="autocomplete-search-box">
       <SearchBox
         ref={searchBoxRef}
         defaultValue={defaultValue}
         placeholder={placeholder}
-        onChange={onChange}
+        onInputChange={onInputChange}
       />
-      {isInputFocused && options.length > 0 ? (
-        <div className={classNames([moduleStyles.autocompleteSuggestions, styles.my2])}>
-          <ListGroup>
-            {options.map((option, idx) => (
-              <ListGroupItem key={idx} colorStyle={focusIndex === idx ? focusStyle : undefined}>
-                {renderOption(option, idx, focusIndex)}
-              </ListGroupItem>
-            ))}
-            {renderFooter && (
-              <ListGroupItem key="footer" colorStyle="secondary">
-                {renderFooter(options)}
-              </ListGroupItem>
-            )}
-          </ListGroup>
-        </div>
-      ) : null}
+      {shouldShowSuggestion && (
+        <Suggestions
+          renderOption={renderOption}
+          focusIndex={focusIndex}
+          options={options}
+          focusStyle={focusStyle}
+          renderFooter={renderFooter}
+          onNearBottom={onNearBottom}
+          onSelect={onSelect}
+        />
+      )}
     </div>
   )
 }

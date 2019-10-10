@@ -43,8 +43,7 @@ class GitHubService implements IService {
 
   findIssues = (options?: FindIssuesOptions): Promise<FindIssuesResults> => {
     const queryFilters = [
-      `org:${this.account}`,
-      `repo:${this.repository}`,
+      `repo:${this.account}/${this.repository}`,
       'is:issue',
     ]
     const query: Record<string, any> = {}

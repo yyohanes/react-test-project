@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import { useStyles, AvailableStyle } from 'app/UI/ThemeProvider'
+import { AvailableStyle } from 'app/UI/Theme'
 
 type Props = {
   colorStyle?: AvailableStyle
@@ -10,10 +10,9 @@ type Props = {
 
 export default (props: Props) => {
   const { children, colorStyle } = props
-  const { styles } = useStyles()
 
   return (
-    <div className={classNames(styles.listGroupItem, styles.listGroupItemAction, colorStyle && styles[`list-group-item-${colorStyle}`])}>
+    <div className={classNames(['list-group-item', 'list-group-item-action', colorStyle ? `list-group-item-${colorStyle}` : undefined])}>
       {children}
     </div>
   )

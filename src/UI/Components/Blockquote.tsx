@@ -1,8 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import { useStyles } from 'app/UI/ThemeProvider'
-
 type Props = {
   footerLine?: string
   children?: React.ReactNode
@@ -10,14 +8,13 @@ type Props = {
 
 export default (props: Props) => {
   const { children, footerLine } = props
-  const { styles } = useStyles()
 
   return (
-    <blockquote className={styles.blockquote}>
+    <blockquote className="blockquote">
       {children}
       {footerLine && (
-        <footer className={classNames([styles.blockquoteFooter, styles.textRight])}>
-          <small className={styles.textMuted}>
+        <footer className={classNames(['blockquote-footer', 'text-right'])}>
+          <small className="text-muted">
             {footerLine}
           </small>
         </footer>

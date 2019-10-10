@@ -9,6 +9,13 @@ import {
 import AutocompleteSearchBox from '..'
 
 describe('AutocompleteSearchBox', () => {
+  beforeAll(() => {
+    // scrollIntoView doesn't exist in JSDom
+    if (!HTMLElement.prototype.scrollIntoView) {
+      HTMLElement.prototype.scrollIntoView = () => {}
+    }
+  })
+
   const testOptions = [
     {
       title: 'Test 1',

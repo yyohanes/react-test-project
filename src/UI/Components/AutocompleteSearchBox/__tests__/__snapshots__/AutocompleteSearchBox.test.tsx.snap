@@ -3,35 +3,51 @@
 exports[`AutocompleteSearchBox Should render suggestions if options > 0 & input is focused 1`] = `
 <div>
   <div
-    class="autocompleteSearchBox"
+    class="autocomplete-search-box"
   >
     <input
-      class=""
+      class="form-control form-control-lg"
       placeholder="Search"
       type="text"
       value=""
     />
     <div
-      class="autocompleteSuggestions"
+      class="autocomplete-search-box__suggestions my-2"
     >
-      <div>
+      <div
+        class="list-group"
+      >
         <div
-          class=""
+          class="autocomplete-search-box__results"
         >
-          <p
-            class="option-item"
+          <div
+            role="button"
+            tabindex="-1"
           >
-            Test 1
-          </p>
-        </div>
-        <div
-          class=""
-        >
-          <p
-            class="option-item"
+            <div
+              class="list-group-item list-group-item-action"
+            >
+              <p
+                class="option-item"
+              >
+                Test 1
+              </p>
+            </div>
+          </div>
+          <div
+            role="button"
+            tabindex="-1"
           >
-            Test 2
-          </p>
+            <div
+              class="list-group-item list-group-item-action"
+            >
+              <p
+                class="option-item"
+              >
+                Test 2
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

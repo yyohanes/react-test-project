@@ -28,3 +28,9 @@ type TSetIssuesPayload = {
   totalIssues: number
 }
 export const setIssues = makeActionCreator<TSetIssuesPayload>('SET_ISSUES')
+
+type TAppendIssuesPayload = {
+  issues: Issue[]
+  totalIssues: number
+}
+export const appendIssues = makeActionCreator<TAppendIssuesPayload>('APPEND_ISSUES')

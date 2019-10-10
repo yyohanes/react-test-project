@@ -26,16 +26,7 @@
     "paths": {
       "app/*": ["src/*"],
       "package.json": ["package.json"]
-    },
-
-    "plugins": [
-      {
-        "name": "typescript-plugin-css-modules",
-        "options": {
-          "camelCase": "dashes"
-        }
-      }
-    ]
+    }
   },
   "include": [
     "./src",

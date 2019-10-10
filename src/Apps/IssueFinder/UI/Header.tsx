@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
-import { ImmutableArray } from 'seamless-immutable'
+import { ImmutableArray, ImmutableObject } from 'seamless-immutable'
 import debounce from 'debounce'
 
 import {
@@ -13,12 +13,12 @@ import {
 } from 'app/UI'
 import { State } from 'app/Apps/IssueFinder/Redux/Reducers'
 import * as SearchActions from 'app/Apps/IssueFinder/Redux/Search/Actions'
+import * as SearchSelectors from 'app/Apps/IssueFinder/Redux/Search/Selectors'
 import { Issue } from 'app/Services/SourceControl'
 
 import AutocompleteIssue from './AutocompleteIssue'
 
-const AUTOCOMPLETE_RESULT_LIMIT = 10
-const DEFAULT_RESULT_LIMIT = 30
+const DEFAULT_RESULT_LIMIT = 20
 
 type DispatchProps = {
   requestSearch: typeof SearchActions.requestSearch
@@ -27,13 +27,23 @@ type DispatchProps = {
 type StateProps = {
   keyword: string
   issues: ImmutableArray<Issue>
+  limit: number
+  nextPage: number
   totalIssues: number
+  isRequesting: boolean
 }
 
 type Props = DispatchProps & StateProps
 
 const Header = (props: Props) => {
-  const { keyword, issues, totalIssues } = props
+  const {
+    keyword,
+    issues,
+    totalIssues,
+    isRequesting,
+    limit,
+    nextPage,
+  } = props
 
   const handleSearchInputChange = (changedValue: string) => {
     props.requestSearch({
@@ -41,6 +51,18 @@ const Header = (props: Props) => {
       page: 1,
       limit: DEFAULT_RESULT_LIMIT,
     })
+  }
+
+  const handleOnSearchNearBottom = () => {
+    props.requestSearch({
+      keyword,
+      page: nextPage,
+      limit,
+    })
+  }
+
+  const handleOnSelect = (option: ImmutableObject<Issue>) => {
+    window.open(option.url, '_blank')
   }
 
   return (
@@ -53,14 +75,20 @@ const Header = (props: Props) => {
         </Column>
         <Column size={12} sizeMd={9}>
           <AutocompleteSearchBox
-            options={keyword.length > 0 ? issues.slice(0, AUTOCOMPLETE_RESULT_LIMIT).asMutable() : []}
+            options={keyword.length > 0 ? issues.asMutable() : []}
             // Debounce 1000 to make rate-limit harder to reach on debug
             // On production app, result could be cached in middleware server
-            onChange={debounce(handleSearchInputChange, __DEBUG__ ? 1000 : 300)}
+            onInputChange={debounce(handleSearchInputChange, __DEBUG__ ? 1000 : 300)}
+            // @ts-ignore
             renderOption={option => <AutocompleteIssue issue={option} key={option.id} />}
             placeholder="Search Issue"
             focusStyle="success"
-            renderFooter={options => <small>{`Showing ${options.length} of ${totalIssues} results`}</small>}
+            isLoading={isRequesting}
+            renderFooter={options => (
+              <small>{isRequesting ? 'Searching...' : `Showing ${options.length} of ${totalIssues} results`}</small>
+            )}
+            onNearBottom={debounce(handleOnSearchNearBottom, 250)}
+            onSelect={handleOnSelect}
           />
         </Column>
       </Container>
@@ -72,7 +100,10 @@ function mapStateToProps(state: State): StateProps {
   return {
     keyword: state.search.keyword || '',
     issues: state.search.issues,
+    limit: state.search.limit,
+    nextPage: SearchSelectors.getNextPage(state),
     totalIssues: state.search.totalIssues,
+    isRequesting: state.search.isRequesting,
   }
 }
 

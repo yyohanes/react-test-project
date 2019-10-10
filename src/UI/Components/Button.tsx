@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import { useStyles, AvailableStyle } from 'app/UI/ThemeProvider'
+import { AvailableStyle } from 'app/UI/Theme'
 
 type Props = {
   colorStyle?: AvailableStyle
@@ -10,12 +10,11 @@ type Props = {
 
 export default (props: Props) => {
   const { children, colorStyle } = props
-  const { styles } = useStyles()
 
   return (
     <button
       type="button"
-      className={classNames(styles.btn, colorStyle && styles[`btn-${colorStyle}`])}
+      className={classNames(['btn', colorStyle && `btn-${colorStyle}`])}
     >
       {children}
     </button>

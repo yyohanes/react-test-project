@@ -1,30 +1,33 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { ImmutableArray } from 'seamless-immutable'
 
-import { Issue } from 'app/Services/SourceControl'
-import { State } from '../Redux/Reducers'
+import { Container, Column, FlexBox } from 'app/UI'
 import Header from './Header'
 
-type StateProps = {
-  issues: ImmutableArray<Issue>
-}
+const App = () => (
+  <FlexBox flex direction="column" fullHeight>
+    <FlexBox>
+      <Header />
+    </FlexBox>
+    <FlexBox flex grow alignItems="center">
+      <Container>
+        <Column>
+          <p className="text-center">
+            Desktop: Ctrl + F to search
+            <br />
+            Navigate results with UP / DOWN
+            <br />
+            Hit ENTER to open the issue
+          </p>
 
-type Props = StateProps
-class App extends React.PureComponent<Props> {
-  render() {
-    return (
-      <div>
-        <Header />
-      </div>
-    )
-  }
-}
+          <p className="text-center">
+            By Yohanes
+            <br />
+            <a href="https://github.com/yyohanes/react-test-project" target="_blank" rel="noreferrer noopener">Source code</a>
+          </p>
+        </Column>
+      </Container>
+    </FlexBox>
+  </FlexBox>
+)
 
-function mapStateToProps(state: State): StateProps {
-  return {
-    issues: state.search.issues,
-  }
-}
-
-export default connect(mapStateToProps)(App)
+export default App

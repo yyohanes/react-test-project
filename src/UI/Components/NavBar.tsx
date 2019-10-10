@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import { useStyles, AvailableStyle } from 'app/UI/ThemeProvider'
+import { AvailableStyle } from 'app/UI/Theme'
 
 type Props = {
   title?: string
@@ -10,10 +10,11 @@ type Props = {
 }
 const NavBar = (props: Props) => {
   const { title, children, colorStyle } = props
-  const { styles } = useStyles()
 
   return (
-    <nav className={classNames([styles.navbar, styles.navbarDark, styles[`bg-${colorStyle}`]])}>
+    <nav
+      className={classNames(['navbar', 'navbar-dark', `bg-${colorStyle}`])}
+    >
       {children || <NavBarBrand>{title}</NavBarBrand>}
     </nav>
   )
@@ -25,10 +26,9 @@ type NavBarBrandProps = {
 }
 export const NavBarBrand = (props: NavBarBrandProps) => {
   const { children } = props
-  const { styles } = useStyles()
 
   return (
-    <a className={styles.navbarBrand} href="/">
+    <a className="navbar-brand" href="/">
       {children}
     </a>
   )

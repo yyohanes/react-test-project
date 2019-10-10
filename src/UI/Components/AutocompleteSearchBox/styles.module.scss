@@ -1,8 +1,14 @@
 .autocomplete-search-box {
   position: relative;
-}
 
-.autocomplete-suggestions {
-  position: absolute;
-  width: 100%;
+  &__suggestions {
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+  }
+
+  &__results {
+    max-height: 50vh;
+    overflow: auto;
+  }
 }

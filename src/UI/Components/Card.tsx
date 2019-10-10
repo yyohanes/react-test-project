@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import { useStyles, AvailableStyle } from 'app/UI/ThemeProvider'
+import { AvailableStyle } from 'app/UI/Theme'
 
 type Props = {
   title?: string
@@ -17,22 +17,21 @@ export default (props: Props) => {
     title,
     footer,
   } = props
-  const { styles } = useStyles()
 
   return (
-    <div className={classNames([styles.card, colorStyle && styles[`bg-${colorStyle}`], styles.m3])}>
-      <div className={styles.cardBody}>
+    <div className={classNames(['card', colorStyle ? `bg-${colorStyle}` : undefined, 'm-3'])}>
+      <div className="card-body">
         {title && (
-          <h5 className={styles.cardTitle}>
+          <h5 className="card-title">
             {title}
           </h5>
         )}
-        <div className={styles.cardText}>
+        <div className="card-text">
           {children}
         </div>
       </div>
       {footer && (
-        <div className={classNames([styles.cardFooter, styles.textMuted])}>
+        <div className={classNames(['card-footer', 'text-muted'])}>
           {footer}
         </div>
       )}

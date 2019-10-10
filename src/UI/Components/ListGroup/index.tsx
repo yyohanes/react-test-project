@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { useStyles } from 'app/UI/ThemeProvider'
 import ListGroupItem from './ListGroupItem'
 
 type Props = {
@@ -9,10 +8,9 @@ type Props = {
 
 const ListGroup = (props: Props) => {
   const { children } = props
-  const { styles } = useStyles()
 
   return (
-    <div className={styles.listGroup}>
+    <div className="list-group">
       {children}
     </div>
   )

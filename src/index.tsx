@@ -2,15 +2,15 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import loadable from '@loadable/component'
 
-import ThemeProvider from 'app/UI/ThemeProvider'
-import styles from 'app/UI/styles/bootstrap.module.scss'
+import Theme from 'app/UI/Theme'
 
 const IssueFinder = loadable(() => import('app/Apps/IssueFinder'))
 
 const EntryPoint = () => (
-  <ThemeProvider styles={styles}>
+  <div>
+    <Theme />
     <IssueFinder />
-  </ThemeProvider>
+  </div>
 )
 
 ReactDOM.render(

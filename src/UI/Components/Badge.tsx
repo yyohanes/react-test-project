@@ -1,7 +1,7 @@
 import React, { CSSProperties } from 'react'
 import classNames from 'classnames'
 
-import { useStyles, AvailableStyle } from 'app/UI/ThemeProvider'
+import { AvailableStyle } from 'app/UI/Theme'
 
 type Props = {
   style?: CSSProperties
@@ -11,10 +11,9 @@ type Props = {
 
 export default (props: Props) => {
   const { style, children, colorStyle } = props
-  const { styles } = useStyles()
 
   return (
-    <span style={style} className={classNames(styles.badge, styles.badgePill, colorStyle && styles[`badge-${colorStyle}`])}>
+    <span style={style} className={classNames(['badge', 'badge-pill', colorStyle ? `badge-${colorStyle}` : undefined])}>
       {children}
     </span>
   )

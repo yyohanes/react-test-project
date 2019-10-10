@@ -13,7 +13,7 @@ export type SearchState = ImmutableObject<{
   isRequesting: boolean
 }>
 
-const defaultState: SearchState = Immutable.from({
+export const defaultState: SearchState = Immutable.from({
   issues: Immutable.from([]),
   totalIssues: 0,
   currentPage: 1,
@@ -35,6 +35,10 @@ export default function SearchReducer(state: SearchState = defaultState, action:
     case SearchActions.setIssues.TYPE:
       return state
         .set('issues', Immutable.from(action.payload.issues))
+        .set('totalIssues', action.payload.totalIssues)
+    case SearchActions.appendIssues.TYPE:
+      return state
+        .update('issues', currentIssues => currentIssues.concat(action.payload.issues))
         .set('totalIssues', action.payload.totalIssues)
     default:
       return state
