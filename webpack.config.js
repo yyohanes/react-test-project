@@ -25,7 +25,7 @@ const config = (env, argv = {}) => {
     output: {
       path: path.resolve(__dirname, BUILD_FOLDER),
       filename: !isDev ? '[name].[hash].js' : '[name].js',
-      chunkFilename: isDev ? '[id].[hash].js' : '[id].js',
+      chunkFilename: !isDev ? '[id].[hash].js' : '[id].js',
       // publicPath: `/${BUILD_FOLDER}/`,
     },
     resolve: {
