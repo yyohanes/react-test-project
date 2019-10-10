@@ -13,7 +13,7 @@ import * as SearchActions from './Actions'
 import * as SearchSelectors from './Selectors'
 
 export function* handleRequestSearch({ payload }: ReturnType<typeof SearchActions.requestSearch>) {
-  const sourceControlService = getSourceControlService(config.sourceControlProvider, config.sourceControlAccount, config.sourceControlProvider)
+  const sourceControlService = getSourceControlService(config.sourceControlProvider, config.sourceControlAccount, config.sourceControlRepo)
 
   const isCurrentlyRequesting = yield select(SearchSelectors.getIsRequesting)
   // Short circuit if it's currently requesting
