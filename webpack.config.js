@@ -11,6 +11,14 @@ const config = (env, argv = {}) => {
   const mode = argv.mode || 'development'
   const isDev = mode === 'development'
 
+  const envs = require('dotenv').config().parsed || {}
+  // Filter only var prefixed with REACT_
+  const envKeys = Object.keys(envs).reduce((prev, next) => {
+    prev[`process.env.${next}`] = JSON.stringify(envs[next]);
+
+    return prev;
+  }, {});
+
   return {
     mode,
     entry: path.resolve(__dirname, 'src', 'index.tsx'),
@@ -120,6 +128,7 @@ const config = (env, argv = {}) => {
       }),
       new webpack.DefinePlugin({
         __DEBUG__: isDev,
+        ...envKeys,
       }),
     ],
     devServer: !isDev ? undefined : {

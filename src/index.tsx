@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import loadable from '@loadable/component'
 
-import Theme from 'app/UI/Theme'
+import { Theme } from 'app/UI'
 
 const IssueFinder = loadable(() => import('app/Apps/IssueFinder'))
 

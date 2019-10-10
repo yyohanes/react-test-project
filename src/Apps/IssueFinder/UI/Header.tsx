@@ -15,6 +15,7 @@ import { State } from 'app/Apps/IssueFinder/Redux/Reducers'
 import * as SearchActions from 'app/Apps/IssueFinder/Redux/Search/Actions'
 import * as SearchSelectors from 'app/Apps/IssueFinder/Redux/Search/Selectors'
 import { Issue } from 'app/Services/SourceControl'
+import config from 'app/Apps/IssueFinder/Config'
 
 import AutocompleteIssue from './AutocompleteIssue'
 
@@ -70,7 +71,7 @@ const Header = (props: Props) => {
       <Container>
         <Column size={12} sizeMd={3}>
           <NavBarBrand>
-            React Issue Finder
+            {`${config.sourceControlRepoName} Issue Finder`}
           </NavBarBrand>
         </Column>
         <Column size={12} sizeMd={9}>

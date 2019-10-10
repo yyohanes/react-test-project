@@ -8,12 +8,13 @@ import {
 
 import { FindIssuesResults } from 'app/Services/SourceControl/IService'
 import { getSourceControlService } from 'app/Services/SourceControl'
+import config from 'app/Apps/IssueFinder/Config'
 import * as SearchActions from './Actions'
 import * as SearchSelectors from './Selectors'
 
-const sourceControlService = getSourceControlService('github', 'facebook', 'react')
-
 export function* handleRequestSearch({ payload }: ReturnType<typeof SearchActions.requestSearch>) {
+  const sourceControlService = getSourceControlService(config.sourceControlProvider, config.sourceControlAccount, config.sourceControlProvider)
+
   const isCurrentlyRequesting = yield select(SearchSelectors.getIsRequesting)
   // Short circuit if it's currently requesting
   if (isCurrentlyRequesting) {

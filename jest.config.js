@@ -7,6 +7,9 @@ module.exports = {
     '^app(.*)$': '<rootDir>/src$1',
     '.(s?css)$': 'identity-obj-proxy',
   },
+  setupFiles: [
+    'dotenv/config',
+  ],
   globals: {
     __DEBUG__: true,
   },
