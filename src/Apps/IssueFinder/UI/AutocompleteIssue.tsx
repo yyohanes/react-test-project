@@ -16,7 +16,7 @@ export default ({ issue }: Props) => (
       <ExternalLinkIcon />
     </h5>
     <small>{`Posted at ${dayjs(issue.createdAt).format('MMM DD YYYY HH:mm:ss')}`}</small>
-    <div className="float-right">
+    <div>
       {issue.labels.map((label, idx: number) => (
         <Badge
           key={idx}

@@ -37,14 +37,13 @@ export default <OT extends unknown>(props: Props<OT>) => {
     onNearBottom,
     onSelect,
   } = props
-  const [isInputFocused, setIsInputFocused] = useState<boolean>(false)
   const [pressedKeys, setPressedKeys] = useState<string[]>([])
   const [focusIndex, setFocusIndex] = useState<number>(-1)
   const searchBoxRef = useRef<HTMLInputElement>(null)
 
   const isSearchShortcutPressed = shortcutWhitelistedKeys
     .filter(shortcut => pressedKeys.includes(shortcut)).length === 2
-  const shouldShowSuggestion = (isInputFocused && options.length > 0) || isLoading
+  const shouldShowSuggestion = options.length > 0 || isLoading
 
   // Keyboard event listeners
   const handleOnInputKeyDown = useCallback(e => {
@@ -88,17 +87,6 @@ export default <OT extends unknown>(props: Props<OT>) => {
     }
   }
 
-  const handleOnInputFocus = () => {
-    setIsInputFocused(true)
-  }
-
-  const handleOnInputBlur = () => {
-    // Give it short window before closing the suggestions. This is to allow other events to run (eg: click)
-    setTimeout(() => {
-      setIsInputFocused(false)
-    }, 100)
-  }
-
   // Attach Up/Down keyboard listener
   useEffect(() => {
     if (searchBoxRef.current) {
@@ -115,27 +103,16 @@ export default <OT extends unknown>(props: Props<OT>) => {
   // Check if pressed keys contain ctrl + f
   useEffect(() => {
     if (searchBoxRef.current && isSearchShortcutPressed) {
-      setIsInputFocused(true)
       searchBoxRef.current.focus()
     }
   }, [pressedKeys])
 
   // Attach ctrl+f listener
   useEffect(() => {
-    if (searchBoxRef.current) {
-      searchBoxRef.current.addEventListener('focus', handleOnInputFocus)
-      searchBoxRef.current.addEventListener('blur', handleOnInputBlur)
-    }
-
     document.addEventListener('keyup', handleOnSearchShortcut)
     document.addEventListener('keydown', handleOnSearchShortcut)
 
     return function cleanup() {
-      if (searchBoxRef.current) {
-        searchBoxRef.current.removeEventListener('focus', handleOnInputFocus)
-        searchBoxRef.current.removeEventListener('blur', handleOnInputBlur)
-      }
-
       document.removeEventListener('keyup', handleOnSearchShortcut)
       document.removeEventListener('keydown', handleOnSearchShortcut)
     }
