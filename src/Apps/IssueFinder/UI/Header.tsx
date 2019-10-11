@@ -36,66 +36,74 @@ type StateProps = {
 
 type Props = DispatchProps & StateProps
 
-const Header = (props: Props) => {
-  const {
-    keyword,
-    issues,
-    totalIssues,
-    isRequesting,
-    limit,
-    nextPage,
-  } = props
-
-  const handleSearchInputChange = (changedValue: string) => {
-    props.requestSearch({
+class Header extends React.PureComponent<Props> {
+  handleSearchInputChange = (changedValue: string) => {
+    const { requestSearch } = this.props
+    requestSearch({
       keyword: changedValue,
       page: 1,
       limit: DEFAULT_RESULT_LIMIT,
     })
   }
 
-  const handleOnSearchNearBottom = () => {
-    props.requestSearch({
+  handleOnSearchNearBottom = () => {
+    const {
+      requestSearch,
+      keyword,
+      nextPage,
+      limit,
+    } = this.props
+
+    requestSearch({
       keyword,
       page: nextPage,
       limit,
     })
   }
 
-  const handleOnSelect = (option: ImmutableObject<Issue>) => {
+  handleOnSelect = (option: ImmutableObject<Issue>) => {
     window.open(option.url, '_blank')
   }
 
-  return (
-    <NavBar colorStyle="primary">
-      <Container>
-        <Column size={12} sizeMd={3}>
-          <NavBarBrand>
-            {`${config.sourceControlRepoName} Issue Finder`}
-          </NavBarBrand>
-        </Column>
-        <Column size={12} sizeMd={9}>
-          <AutocompleteSearchBox
-            options={keyword.length > 0 ? issues.asMutable() : []}
-            // Debounce 1000 to make rate-limit harder to reach on debug
-            // On production app, result could be cached in middleware server
-            onInputChange={debounce(handleSearchInputChange, __DEBUG__ ? 1000 : 300)}
-            // @ts-ignore
-            renderOption={option => <AutocompleteIssue issue={option} key={option.id} />}
-            placeholder="Search Issue"
-            focusStyle="success"
-            isLoading={isRequesting}
-            renderFooter={options => (
-              <small>{isRequesting ? 'Searching...' : `Showing ${options.length} of ${totalIssues} results`}</small>
-            )}
-            onNearBottom={debounce(handleOnSearchNearBottom, 250)}
-            nearBottomThreshold={200}
-            onSelect={handleOnSelect}
-          />
-        </Column>
-      </Container>
-    </NavBar>
-  )
+  render() {
+    const {
+      keyword,
+      issues,
+      totalIssues,
+      isRequesting,
+    } = this.props
+
+    return (
+      <NavBar colorStyle="primary">
+        <Container>
+          <Column size={12} sizeMd={3}>
+            <NavBarBrand>
+              {`${config.sourceControlRepoName} Issue Finder`}
+            </NavBarBrand>
+          </Column>
+          <Column size={12} sizeMd={9}>
+            <AutocompleteSearchBox
+              options={keyword.length > 0 ? issues.asMutable() : []}
+              // Debounce 1000 to make rate-limit harder to reach on debug
+              // On production app, result could be cached in middleware server
+              onInputChange={debounce(this.handleSearchInputChange, __DEBUG__ ? 1000 : 300)}
+              // @ts-ignore
+              renderOption={option => <AutocompleteIssue issue={option} key={option.id} />}
+              placeholder="Search Issue"
+              focusStyle="success"
+              isLoading={isRequesting}
+              renderFooter={options => (
+                <small>{isRequesting ? 'Searching...' : `Showing ${options.length} of ${totalIssues} results`}</small>
+              )}
+              onNearBottom={debounce(this.handleOnSearchNearBottom, 250)}
+              nearBottomThreshold={200}
+              onSelect={this.handleOnSelect}
+            />
+          </Column>
+        </Container>
+      </NavBar>
+    )
+  }
 }
 
 function mapStateToProps(state: State): StateProps {
